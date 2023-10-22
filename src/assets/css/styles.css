@@ -9,5 +9,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    
 }
+
+#timer-display{
+    margin: 1rem;
+}
+
 
