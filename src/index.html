@@ -4,8 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Pomodoro</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="assets/css/styles.css">
 </head>
 <body>
+    <div class="container">
+        <h1>Pomodoro App</h1>
+        <div id="timer-display">25:00</div>
+        <div id="options">
+        <button id="start-button">Start</button>
+        <button id="reset-button">Reset</button>
+        </div>
+        <div id="weather-info">
+            <p>Depending on the location and weather, appropriate music will be played </p>
+            <label for="location">Enter the city:</label>
+            <input type="text" id="location" placeholder="London">
+            <button id="get-weather-button">Pobierz Pogodę</button>
+        </div>
+        <div id="music-info">
+          <p> Music</p> 
+            <button id="start-button"><</button>
+            <button id="start-button">></button>
+        </div>
+    </div>
+    <script src="js/app.js"></script>
     
 </body>
 </html>
