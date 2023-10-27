@@ -98,7 +98,7 @@ $(document).ready(function () {
   function startTimer() {
     if (!isTimerRunning) {
       if (pausedTime === 0) {
-        initialTime = parseInt(workTimeInput.val()) //* 60;
+        initialTime = parseInt(workTimeInput.val()) * 60;
       }
       timeLeft = initialTime - pausedTime;
       isTimerRunning = true;
@@ -122,12 +122,12 @@ $(document).ready(function () {
       if (timeLeft === 0) {
         clearInterval(timer);
         if (isBreakTime) {
-          timeLeft = parseInt(workTimeInput.val()) //* 60;
+          timeLeft = parseInt(workTimeInput.val()) * 60;
           isBreakTime = false;
           sound.pause();
           playBell();
         } else {
-          timeLeft = parseInt(breakTimeInput.val()) //* 60;
+          timeLeft = parseInt(breakTimeInput.val()) * 60;
           isBreakTime = true;
           sound.pause();
           sound.currentTime = 0;
