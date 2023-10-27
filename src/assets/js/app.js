@@ -6,6 +6,7 @@ $(document).ready(function () {
   $("#get-weather-button").on("click", function () {
     const location = $("#location").val();
     getWeather(location);
+  
   });
 
   function getWeather(location) {
@@ -39,7 +40,6 @@ $(document).ready(function () {
   function handleWeatherError(error) {
     console.error("Error fetching weather data:", error);
   }
-
 
   function removeWeatherElements() {
     $("#icon").remove();
@@ -102,7 +102,15 @@ $(document).ready(function () {
       }
       timeLeft = initialTime - pausedTime;
       isTimerRunning = true;
-      $(".time").addClass("d-none");
+      $(".time").animate({
+        opacity: 0,
+        width: "0",
+        height: "0"
+      }, 500, function() {
+        $(this).css({display:"none"}).css({opacity: 1, width: "auto", height: "auto"}).animate({
+          opacity: 1,
+        }, 500);
+      });
     }
     if (!isBreakTime) {
       determineWeather();
@@ -158,7 +166,7 @@ $(document).ready(function () {
     startButton.prop('disabled', false);
     pauseButton.prop('disabled', true);
     resetButton.prop('disabled', false);
-    $(".time").removeClass("d-none");
+   
     isBreakTime = false;
     sound.pause();
     sound.currentTime = 0;
@@ -185,7 +193,18 @@ $(document).ready(function () {
   pauseButton.on('click', pauseTimer);
   resetButton.on('click', resetTimer);
 
-
+  resetButton.on('click',function() {
+  $(".time").css({
+    opacity: 0,
+    width: "0",
+    height: "0",
+    display: "inline"
+  }).animate({
+    opacity: 1,
+    width: "400", 
+    height: "180" 
+  }, 500);
+})
   ////////////////////////////////
   /*      TRACK SECTION      */
   ////////////////////////////////

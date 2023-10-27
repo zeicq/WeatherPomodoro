@@ -33,6 +33,24 @@ button {
     justify-content: center;
     min-height: 260px;
 }
+@keyframes customAnimation {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+.animate {
+    animation: customAnimation 1s;
+}
+
 
 .start-text {
     display: flex;
@@ -59,9 +77,40 @@ button {
 }
 
 #get-weather-button{
+    margin: 1.5rem;
     background-color: #130c22;
 }
 
 .d-none {
     display: none;
+}
+
+.time{
+    text-align: center;
+    width: 400px;
+    height: 180px;
+}
+
+
+#work-time {
+    flex-basis: 1;
+}
+
+#break-time {
+    flex-basis: 0;
+}
+.inputValue{
+    text-align: center;
+}
+
+#timer-display {
+    margin: 1rem;
+}
+
+#timer {
+    color: #3f3838;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 4rem;
+    letter-spacing: 1rem;
+    font-weight: bold;
 }
