@@ -1,19 +1,63 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@1,300&display=swap');
 
-*{
+* {
     box-sizing: border-box;
     font-family: 'Lato', sans-serif;
 }
 
-.container{
+body {
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100vh;
+}
+
+span {
+    text-decoration: underline;
+}
+
+button {
+    min-width: 120px;
+}
+
+.container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    
 }
 
-#timer-display{
-    margin: 1rem;
+#weather-info {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 7rem;
+    align-items: center;
+    justify-content: center;
+    min-height: 260px;
 }
 
+.start-text {
+    display: flex;
+    align-items: center;
+}
 
+.logo {
+    max-width: 150px;
+}
+
+#weather-header {
+    margin: 0 2rem;
+    font-size: 18px;
+}
+
+.weather-data {
+    display: flex;
+    flex-direction: column;
+    font-size: 18px;
+}
+
+#location {
+    text-align: center;
+}
+
+#get-weather-button{
+    background-color: #130c22;
+}
