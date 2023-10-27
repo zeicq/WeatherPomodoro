@@ -61,3 +61,7 @@ button {
 #get-weather-button{
     background-color: #130c22;
 }
+
+.d-none {
+    display: none;
+}

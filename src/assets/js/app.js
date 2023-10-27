@@ -33,20 +33,21 @@ $(document).ready(function () {
     removeWeatherElements();
     createGraphicInfo(result);
     updateWeatherData(result);
-}
+    getWeatherName(result);
+  }
 
   function handleWeatherError(error) {
     console.error("Error fetching weather data:", error);
   }
 
 
-function removeWeatherElements() {
+  function removeWeatherElements() {
     $("#icon").remove();
     $("#weather-header").remove();
     $("#weather-info").addClass('animate');
-}
+  }
 
-function createGraphicInfo(result) {
+  function createGraphicInfo(result) {
     const graphicInfoDiv = $("<div>").addClass("graphic-info");
     const iconImg = $("<img>")
       .attr("id", "icon")
@@ -55,110 +56,172 @@ function createGraphicInfo(result) {
       .css("marginRight", "1.2rem");
     graphicInfoDiv.append(iconImg);
     $(".start-text").append(graphicInfoDiv);
-}
+  }
+  function getWeatherName(result) {
+    weatherText = result.current.condition.text;
+    isDay = result.current.is_day;
+  }
 
-function updateWeatherData(result) {
+  function updateWeatherData(result) {
     $("#city").text("City: " + result.location.name);
     $("#temp").text("Temp: " + result.current.temp_c + "°C");
     $("#cloud").text("Cloud: " + result.current.cloud + "%");
     $("#icon-text").text(result.current.condition.text);
-}
+  }
 
   ////////////////////////////////
   /*      POMODORO SECTION      */
   ////////////////////////////////
 
 
-    const timerElement = $('#timer');
-    const startButton = $('#startBtn');
-    const pauseButton = $('#pauseBtn');
-    const resetButton = $('#resetBtn');
-    const workTimeInput = $('#work-time');
-    const breakTimeInput = $('#break-time');
+  const timerElement = $('#timer');
+  const startButton = $('#startBtn');
+  const pauseButton = $('#pauseBtn');
+  const resetButton = $('#resetBtn');
+  const workTimeInput = $('#work-time');
+  const breakTimeInput = $('#break-time');
 
-    let timer;
-    let isBreakTime = false;
-    let isTimerRunning = false;
-    let timeLeft = 0;
-    let pausedTime = 0;
-    let initialTime = 0;
+  let timer;
+  let isBreakTime = false;
+  let isTimerRunning = false;
+  let timeLeft = 0;
+  let pausedTime = 0;
+  let initialTime = 0;
 
-    function updateTimer() {
-      const minutes = Math.floor(timeLeft / 60);
-      let seconds = timeLeft % 60;
-      seconds = seconds < 10 ? '0' + seconds : seconds;
-      timerElement.text(`${minutes}:${seconds}`);
-    }
+  function updateTimer() {
+    const minutes = Math.floor(timeLeft / 60);
+    let seconds = timeLeft % 60;
+    seconds = seconds < 10 ? '0' + seconds : seconds;
+    timerElement.text(`${minutes}:${seconds}`);
+  }
 
-    function startTimer() {
-      if (!isTimerRunning) {
-        if (pausedTime === 0) {
-          initialTime = parseInt(workTimeInput.val()) * 60;
-        }
-        timeLeft = initialTime - pausedTime;
-        isTimerRunning = true;
-        $(".time").addClass("d-none");
+  function startTimer() {
+    if (!isTimerRunning) {
+      if (pausedTime === 0) {
+        initialTime = parseInt(workTimeInput.val()) //* 60;
       }
-
-      timer = setInterval(function () {
-        timeLeft--;
+      timeLeft = initialTime - pausedTime;
+      isTimerRunning = true;
+      $(".time").addClass("d-none");
+    }
+    if (!isBreakTime) {
+      determineWeather();
+      sound.play();
+    }
+    timer = setInterval(function () {
+      timeLeft--;
+      updateTimer();
+      if (timeLeft === 0) {
+        clearInterval(timer);
+        if (isBreakTime) {
+          timeLeft = parseInt(workTimeInput.val()) //* 60;
+          isBreakTime = false;
+          sound.pause();
+          playBell();
+        } else {
+          timeLeft = parseInt(breakTimeInput.val()) //* 60;
+          isBreakTime = true;
+          sound.pause();
+          sound.currentTime = 0;
+          playBell();
+        }
+        
+        sound.pause();
         updateTimer();
-        if (timeLeft === 0) {
-          clearInterval(timer);
-          if (isBreakTime) {
-            timeLeft = parseInt(workTimeInput.val()) * 60;
-            isBreakTime = false;
-          } else {
-            timeLeft = parseInt(breakTimeInput.val()) * 60;
-            isBreakTime = true;
-          }
-
-          updateTimer();
-          startButton.prop('disabled', false);
-          pauseButton.prop('disabled', true);
-          resetButton.prop('disabled', false);
-        }
-      }, 1000);
-      startButton.prop('disabled', true);
-      pauseButton.prop('disabled', false);
-    }
-
-    function pauseTimer() {
-      clearInterval(timer);
-      if (isTimerRunning) {
-        pausedTime = initialTime - timeLeft;
+        startButton.prop('disabled', false);
+        pauseButton.prop('disabled', true);
+        resetButton.prop('disabled', false);
       }
-      isTimerRunning = false;
-      startButton.prop('disabled', false);
-      pauseButton.prop('disabled', true);
-      resetButton.prop('disabled', false);
+    }, 1000);
+    startButton.prop('disabled', true);
+    pauseButton.prop('disabled', false);
+  }
+
+  function pauseTimer() {
+    clearInterval(timer);
+    if (isTimerRunning) {
+      pausedTime = initialTime - timeLeft;
+    }
+    isTimerRunning = false;
+    startButton.prop('disabled', false);
+    pauseButton.prop('disabled', true);
+    resetButton.prop('disabled', false);
+    sound.pause();
+  }
+
+  function resetTimer() {
+    clearInterval(timer);
+    isTimerRunning = false;
+    timeLeft = parseInt(workTimeInput.val()) * 60;
+    pausedTime = 0;
+    updateTimer();
+    startButton.prop('disabled', false);
+    pauseButton.prop('disabled', true);
+    resetButton.prop('disabled', false);
+    $(".time").removeClass("d-none");
+    isBreakTime = false;
+    sound.pause();
+    sound.currentTime = 0;
+  }
+
+  function playBell() {
+    let audioBell;
+    const audioPath = `assets/music/bell.mp3`;
+    audioBell = new Audio(audioPath);
+    audioBell.loop = false;
+    audioBell.play();
+  }
+
+  workTimeInput.on('input', function () {
+    resetTimer();
+    updateTimer();
+  });
+
+  breakTimeInput.on('input', function () {
+    resetTimer();
+  });
+
+  startButton.on('click', startTimer);
+  pauseButton.on('click', pauseTimer);
+  resetButton.on('click', resetTimer);
+
+
+  ////////////////////////////////
+  /*      TRACK SECTION      */
+  ////////////////////////////////
+  let weatherText;
+  let isDay;
+
+  function determineWeather() {
+
+    let result;
+    if (weatherText === undefined) {
+      weatherText = "sunny";
+    } else if (weatherText.includes("rain")) {
+      weatherText = "rain";
+    } else if (weatherText.includes("snow")) {
+      weatherText = "snow";
+    } else if (!weatherText.includes("rain") && !weatherText.includes("snow") && isDay === 1) {
+      weatherText = "sunny";
+    } else if (!weatherText.includes("rain") && !weatherText.includes("snow") && isDay === 0) {
+      weatherText = "night";
+    } else {
+      weatherText = "sunny";
     }
 
-    function resetTimer() {
-      clearInterval(timer);
-      isTimerRunning = false;
-      timeLeft = parseInt(workTimeInput.val()) * 60;
-      pausedTime = 0;
-      updateTimer();
-      startButton.prop('disabled', false);
-      pauseButton.prop('disabled', true);
-      resetButton.prop('disabled', false);
-      $(".time").removeClass("d-none");
-      isBreakTime = false;
+    result = `assets/music/${weatherText}.mp3`;
+
+    if (sound.src == "" || sound.attributes[1].textContent != result) {
+      sound.setAttribute("src", result);
+      sound.load();
+      sound.loop = true;
+      sound.play();
     }
+  }
 
-    workTimeInput.on('input', function () {
-      resetTimer();
-      updateTimer();
-    });
 
-    breakTimeInput.on('input', function () {
-      resetTimer();
-    });
 
-    startButton.on('click', startTimer);
-    pauseButton.on('click', pauseTimer);
-    resetButton.on('click', resetTimer);
+
 
 });
 
