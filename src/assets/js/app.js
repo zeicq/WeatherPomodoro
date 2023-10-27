@@ -11,7 +11,7 @@ $(document).ready(function () {
 
   function getWeather(location) {
     const apiKey = 'fc29ae21407a4b7a9e8172204232210';
-    const address = "http://api.weatherapi.com/v1/current.json?key=";
+    const address = "https://api.weatherapi.com/v1/current.json?key=";
     const apiUrl = address + apiKey + "&q=" + location;
 
     fetchWeatherData(apiUrl, function (result) {
