@@ -64,9 +64,101 @@ function updateWeatherData(result) {
     $("#icon-text").text(result.current.condition.text);
 }
 
+  ////////////////////////////////
+  /*      POMODORO SECTION      */
+  ////////////////////////////////
 
 
+    const timerElement = $('#timer');
+    const startButton = $('#startBtn');
+    const pauseButton = $('#pauseBtn');
+    const resetButton = $('#resetBtn');
+    const workTimeInput = $('#work-time');
+    const breakTimeInput = $('#break-time');
 
+    let timer;
+    let isBreakTime = false;
+    let isTimerRunning = false;
+    let timeLeft = 0;
+    let pausedTime = 0;
+    let initialTime = 0;
+
+    function updateTimer() {
+      const minutes = Math.floor(timeLeft / 60);
+      let seconds = timeLeft % 60;
+      seconds = seconds < 10 ? '0' + seconds : seconds;
+      timerElement.text(`${minutes}:${seconds}`);
+    }
+
+    function startTimer() {
+      if (!isTimerRunning) {
+        if (pausedTime === 0) {
+          initialTime = parseInt(workTimeInput.val()) * 60;
+        }
+        timeLeft = initialTime - pausedTime;
+        isTimerRunning = true;
+        $(".time").addClass("d-none");
+      }
+
+      timer = setInterval(function () {
+        timeLeft--;
+        updateTimer();
+        if (timeLeft === 0) {
+          clearInterval(timer);
+          if (isBreakTime) {
+            timeLeft = parseInt(workTimeInput.val()) * 60;
+            isBreakTime = false;
+          } else {
+            timeLeft = parseInt(breakTimeInput.val()) * 60;
+            isBreakTime = true;
+          }
+
+          updateTimer();
+          startButton.prop('disabled', false);
+          pauseButton.prop('disabled', true);
+          resetButton.prop('disabled', false);
+        }
+      }, 1000);
+      startButton.prop('disabled', true);
+      pauseButton.prop('disabled', false);
+    }
+
+    function pauseTimer() {
+      clearInterval(timer);
+      if (isTimerRunning) {
+        pausedTime = initialTime - timeLeft;
+      }
+      isTimerRunning = false;
+      startButton.prop('disabled', false);
+      pauseButton.prop('disabled', true);
+      resetButton.prop('disabled', false);
+    }
+
+    function resetTimer() {
+      clearInterval(timer);
+      isTimerRunning = false;
+      timeLeft = parseInt(workTimeInput.val()) * 60;
+      pausedTime = 0;
+      updateTimer();
+      startButton.prop('disabled', false);
+      pauseButton.prop('disabled', true);
+      resetButton.prop('disabled', false);
+      $(".time").removeClass("d-none");
+      isBreakTime = false;
+    }
+
+    workTimeInput.on('input', function () {
+      resetTimer();
+      updateTimer();
+    });
+
+    breakTimeInput.on('input', function () {
+      resetTimer();
+    });
+
+    startButton.on('click', startTimer);
+    pauseButton.on('click', pauseTimer);
+    resetButton.on('click', resetTimer);
 
 });
 

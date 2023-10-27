@@ -30,6 +30,32 @@
       <a id="get-weather-button" class="waves-effect waves-light btn">
         <i class="material-icons right">cloud</i>Get Weather</a>
     </div>
+    <div class="time">
+      <label for="work-time" class="text">Work time(minutes)</label>
+      <input type="text" id="work-time" value="25" class="inputValue" placeholder="25" />
+      <span id="work-time-error" class="error-message"></span>
+      <label for="break-time" class="text">Break time(minutes)</label>
+      <input type="text" id="break-time" value="5" class="inputValue" placeholder="5" />
+    </div>
+    <div id="timer">25:00</div>
+    <div id="pomTime"></div>
+
+    <div id="options">
+      <button class="btn waves-effect waves-light green hoverable" id="startBtn">
+        <i class="material-icons">play_arrow</i>
+      </button>
+      <button class="btn waves-effect waves-light blue hoverable" id="pauseBtn" disabled>
+        <i class="material-icons">pause</i>
+      </button>
+      <button class="btn waves-effect waves-light red hoverable" id="resetBtn">
+        <i class="material-icons">restore</i>
+      </button>
+    </div>
+
+    <audio id="sound">
+      <source src="assets/music/night.mp3" type="audio/mpeg" />
+    </audio>
+
 
 
   </div>
