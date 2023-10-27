@@ -1,4 +1,3 @@
-
 $(document).ready(function () {
   ////////////////////////////////
   /*       WEATHER SECTION      */
@@ -7,8 +6,6 @@ $(document).ready(function () {
   $("#get-weather-button").on("click", function () {
     const location = $("#location").val();
     getWeather(location);
-    $("#weather-info").removeClass('animate');
-
   });
 
   function getWeather(location) {
@@ -33,11 +30,23 @@ $(document).ready(function () {
   }
 
   function handleWeatherSuccess(result) {
+    removeWeatherElements();
+    createGraphicInfo(result);
+    updateWeatherData(result);
+}
 
+  function handleWeatherError(error) {
+    console.error("Error fetching weather data:", error);
+  }
+
+
+function removeWeatherElements() {
     $("#icon").remove();
     $("#weather-header").remove();
     $("#weather-info").addClass('animate');
+}
 
+function createGraphicInfo(result) {
     const graphicInfoDiv = $("<div>").addClass("graphic-info");
     const iconImg = $("<img>")
       .attr("id", "icon")
@@ -46,16 +55,16 @@ $(document).ready(function () {
       .css("marginRight", "1.2rem");
     graphicInfoDiv.append(iconImg);
     $(".start-text").append(graphicInfoDiv);
+}
 
+function updateWeatherData(result) {
     $("#city").text("City: " + result.location.name);
     $("#temp").text("Temp: " + result.current.temp_c + "°C");
     $("#cloud").text("Cloud: " + result.current.cloud + "%");
     $("#icon-text").text(result.current.condition.text);
-  }
+}
 
-  function handleWeatherError(error) {
-    console.error("Error fetching weather data:", error);
-  }
+
 
 
 
